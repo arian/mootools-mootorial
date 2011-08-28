@@ -1,36 +1,34 @@
-<?
-class Content
-{
+<?php
+
+class Content {
+
 	public $html;
 	public $children;
-	
-	private $folder;
-	
+
+	protected $folder;
+
 	public function __construct($folder){
-		
 		$this->folder = $folder;
 		$this->html = $this->getHTML();
 		$this->getChildren();
 	}
-	
+
 	function getFiles(){
 		$dir = opendir($this->folder);
 		while($file = readdir($dir)){
-			if (substr($file, 0, 1) != '.'){
-				$files[] = $file;
-			}
+			if (substr($file, 0, 1) != '.') $files[] = $file;
 		}
 		closedir($dir);
 		sort($files);
 		return $files;
 	}
-	
+
 	function getChildren(){
 		foreach($this->getFiles() as $file){
 			$this->children[] = $file;
 		}
 	}
-	
+
 	function getHTML(){
 		$html = '';
 		foreach($this->getFiles() as $file){
@@ -40,4 +38,3 @@ class Content
 	}
 
 }
-?>

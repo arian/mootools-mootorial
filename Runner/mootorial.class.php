@@ -1,11 +1,13 @@
 <?php
-$dir = dirname(__FILE__);
-require("$dir/menuitem.class.php");
-require("$dir/markdown.class.php");
-require("$dir/content.class.php");
 
-class Mootorial
-{
+$dir = dirname(__FILE__);
+
+include_once $dir . '/menuitem.class.php';
+include_once $dir . '/markdown.class.php';
+include_once $dir . '/content.class.php';
+
+
+class Mootorial {
 	// Public properties
     public $menuitems;
     public $html;
@@ -21,12 +23,12 @@ class Mootorial
 		$this->getMenu();
 		$this->getHTML();
 	}
-	
+
 	// Public functions
 
 
 	// Private functions
-	function getSourceFiles(){
+	protected function getSourceFiles(){
 		$dir = opendir($this->sourcefolder);
 		while($file = readdir($dir)){
 			if (substr($file, 0, 1) != "."){
@@ -36,16 +38,15 @@ class Mootorial
 		closedir($dir);
 		sort($this->sourcefiles);
 	}
-	
-	function getMenu(){
+
+	protected function getMenu(){
 		foreach($this->sourcefiles as $filename){
 			$this->menuitems[] = new MenuItem($filename);
 		}
 	}
-	
-	function getHTML(){
+
+	protected function getHTML(){
 		$content = new Content('./Source/06. MooTools FX');
 		$this->html = $content->html;
 	}
 }
-?>
