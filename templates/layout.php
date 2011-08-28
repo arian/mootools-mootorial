@@ -26,13 +26,23 @@
 	<script src="<?php echo BASE_PATH; ?>/assets/script/mootorial.tabs.js"></script>
 
 </head>
+
 <body>
 	<div class="container">
 		<nav role="menu">
 			<?php echo $this->partial('menu.php'); ?>
 		</nav>
 		<div class="main">
-			<?php echo $mootorial->html; ?>
+			<?php
+			$page = $chapter ? $Content->chapter($chapter) : ($section ? $Content->section($section) : false);
+			if ($page !== false):
+				if ($chapter):
+					echo '<h1>' . $page['name'] . '</h1>';
+				endif;
+				echo $page['content'];
+			else: echo $this->partial('error.php');
+			endif;
+			?>
 		</div>
 	</div>
 </body>
