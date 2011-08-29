@@ -24,20 +24,12 @@ class Template_Content {
 	}
 
 	public function chapter($path){
-		if (!isset($this->_pageslookup[$path])) return false;
-		$page = $this->_pageslookup[$path];
-		$children = !empty($page['children']) ? $page['children'] : array();
-		array_unshift($children, array(
-			'name' => $page['name'],
-			'filename' => $page['filename']
-		));
-		if (!count($children)) return false;
-		$html = '';
-		foreach ($children as $slug => $child){
+		$page = $this->section($path);
+		if (!$page) return false;
+		if (!empty($page['children'])) foreach ($page['children'] as $slug => $child){
 			$_page = $this->section($path . '/' . $slug);
-			$html .= $_page['content'];
+			if ($_page) $page['content'] .= $_page['content'];
 		}
-		$page['content'] = $html;
 		return $page;
 	}
 
@@ -45,6 +37,11 @@ class Template_Content {
 		if (empty($this->_pageslookup[$section])) return false;
 		$page = $this->_pageslookup[$section];
 		$file = Path::resolve($this->_folder, $page['filename']);
+
+		if (DEVELOPER && (!file_exists($file) || !is_file($file))){
+			throw new Template_ContentException('This file: "' . $file . '" does not exist');
+		}
+
 		$md = file_get_contents($file);
 
 		$parser = new MarkdownExtra_Parser();
